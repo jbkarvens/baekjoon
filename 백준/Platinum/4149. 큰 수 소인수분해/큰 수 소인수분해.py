@@ -1,8 +1,8 @@
 from random import randint
 import math
 
-MILLER_RABIN_TEST_LIST = [2,3,5,7,11,13,17,19,23]
-MAX_NUM = 2**62
+MILLER_RABIN_TEST_LIST = [2,3,5,7,11,13,17,19,23,29]
+MAX_NUM = 10**19
 ECM_PRECISION = int(math.e**(1/2*math.sqrt(math.log(MAX_NUM)*math.log(math.log(MAX_NUM)))))
 PROBABILISTIC_TEST_LIMIT = 10000
 PRIME_TEST_BOUND = 1000000
@@ -220,5 +220,5 @@ def factor_prime(n):
 if __name__=='__main__':
     n=int(input())
     lst=sorted(factor_prime(n))
-    for p in lst:
-        print(p)
+    for i in range(len(lst)):
+        print(lst[i])
