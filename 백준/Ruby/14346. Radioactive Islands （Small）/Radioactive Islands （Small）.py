@@ -1,11 +1,11 @@
 # from matplotlib import pyplot as plt
 FAIL_ANS = 100000
-PRECISION = 0.0001
+PRECISION = 0.001
 Y_UP=20
 Y_DOWN=-20
 X_LEFT = -10
 X_RIGHT = 10
-ONE_STEP=0.01/2
+ONE_STEP=0.01
 C_UP = 10
 C_DOWN = -10
 A_UP = 10
@@ -47,7 +47,7 @@ def RK4(x,y,yp,c=0):
 
 def find_yp0(a,b,c,low,high):
     ans = FAIL_ANS
-    while high-low>PRECISION/2:
+    while high-low>=PRECISION/2:
         mid = (low+high)/2
         ans,y=RK4(X_LEFT,a,mid,c)
         # ans,y,xrem,yrem=RK4(X_LEFT,a,mid,c)
