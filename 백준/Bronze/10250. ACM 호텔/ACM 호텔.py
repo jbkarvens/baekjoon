@@ -1,5 +1,5 @@
 import sys
-# input=sys.stdin.readline
+input=sys.stdin.readline
 for _ in range(int(input())):
     h,w,n=map(int,input().split())
     y=str(1+(n-1)%h)
