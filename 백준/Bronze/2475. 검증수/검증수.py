@@ -1,0 +1,1 @@
+print(sum([a*a for a in list(map(int,input().split()))])%10)
