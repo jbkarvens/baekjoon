@@ -11,6 +11,8 @@ def dijk(node):
     h=[(0,node)]
     while h:
         c_v,v=heapq.heappop(h)
+        if c_v>d[v]:
+            continue
         for w,c_vw in adj[v]:
             c_w=c_v+c_vw
             if c_w<d[w]:
