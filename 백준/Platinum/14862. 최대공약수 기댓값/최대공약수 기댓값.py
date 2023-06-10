@@ -29,10 +29,10 @@ if __name__ =='__main__':
         for d in range(1, min(B) + 1):
             prod = 1
             for ai, bi in zip(A, B):
-                prod *= (bi // d - (ai - 1) // d)
-            P += tot[d] * prod
+                prod = (prod * (bi // d - (ai - 1) // d)) % NUM
+            P = (P + tot[d] * prod) % NUM
         for ai, bi in zip(A, B):
-            Q *= (bi - ai + 1)
+            Q = (Q * (bi - ai + 1)) % NUM
         u, v = P, Q
         while v > 0:
             u, v = v, u % v
