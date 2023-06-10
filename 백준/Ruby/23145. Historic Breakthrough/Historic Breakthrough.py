@@ -2,8 +2,6 @@ import sys
 from random import randint
 import math
 
-MAX_NUM = 10**13
-ECM_PRECISION = int(0.8*math.e**(1*math.sqrt(math.log(MAX_NUM)*math.log(math.log(MAX_NUM)))))
 MR_TEST_LIST = [2,3,5,7,11,13,17,19,23]
 PROBABILISTIC_LIMIT = 1000
 SMALL_PRIME = 10000
@@ -43,79 +41,14 @@ def MR(n):
         if not a_witness:
             return False
     return True
-
-class InvException(Exception):
-    def __init__(self,d):
-        self.d=d
-
-def inv(a,n):
-    d=math.gcd(a,n)
-    if d>1:
-        raise InvException(d)
-    else:
-        return pow(a,-1,n)
-
-def ECM(n):
-    prime_lst=prime_sieve(ECM_PRECISION)
-    for _ in range(PROBABILISTIC_LIMIT):
-        a=randint(1,n)
-        x0=randint(1,n)
-        y0=randint(1,n)
-        x,y=x0,y0
-        b=(y*y-x**3-a*x)%n
-        if a%n==0 or b%n==0:
-            continue
-        for k in prime_lst:
-            x0, y0 = x, y
-            if k*k<=ECM_PRECISION:
-                k=k**int(math.log(ECM_PRECISION)/math.log(k))
-            try:
-                if k&(k-1)==0:
-                    while k>1:
-                        s = ((3*x*x+a)*inv(2*y,n))%n
-                        tmp = x
-                        x=(s*s-2*x)%n
-                        y=(s*(x-tmp)+y)%n
-                        k>>=1
-                    continue
-                k-=1
-                while k>=1:
-                    s = ((3*x*x+a)*inv(2*y,n))%n
-                    tmp = x
-                    x=(s*s-2*x)%n
-                    y=(s*(x-tmp)+y)%n
-                    if k&1:
-                        if x==x0 and y==y0:
-                            s = ((3*x*x+a)*inv(2*y,n))%n
-                        else:
-                            s=((y-y0)*inv(x-x0,n))%n
-                        x = (s*s-x0-x)%n
-                        y = (s*(x-x0)+y0)%n
-                    k>>=1
-            except InvException as e:
-                d=e.d
-                if d==n or d==1:
-                    continue
-                else:
-                    return d
-    raise Exception('ERROR : ECM Failed in Probabilistic limit')
-
-def prime_sieve(n):
-    prime_chk=[True for _ in range(n+1)]
-    for i in range(2,n+1):
-        if prime_chk[i]:
-            j=i+i
-            while j<=n:
-                prime_chk[j]=False
-                j+=i
-    return [i for i in range(2,n+1) if prime_chk[i]]
-
+    
 def isPrime(n):
     if n<SMALL_PRIME:
         return is_small_prime(n)
     else:
         return MR(n)
     
+
 def brent(n):
     y,c=randint(1,n-1),randint(1,n-1)
     g,r,q=1,1,1
@@ -149,13 +82,13 @@ def factor(n,m):
         return [n]
     if n > 10**8:
         # phi(n)의 p-1, q-1들이 보통 2-지수가 다를 것임을 이용
-        for _ in range(10):
+        for _ in range(100):
             g = randint(2,m-2)
             gg = math.gcd(g,n)
             if 1<gg<n:
                 return factor(gg,m) + factor(n//gg,m)
             g = pow(g, m, n)
-            for _ in range(10):
+            for _ in range(100):
                 gg = math.gcd(g-1, n)
                 if 1<gg<n:
                     return factor(gg,m) + factor(n//gg,m)
@@ -187,13 +120,13 @@ def mysqrt(n):
         return x+1
 
 def solve(m,m_or):
-    # if m>10**24:
-    #     for i in range(1,len(tot)):
-    #         n = i*tot[i]
-    #         if m%n==0:
-    #             p = int(mysqrt(m//n))+1
-    #             if m%p==0:
-    #                 return solve(m//(p*(p-1)),m_or)*p
+    if m>2*10**28:
+        for i in range(1,len(tot)):
+            n = i*tot[i]
+            if m%n==0:
+                p = int(mysqrt(m//n))+1
+                if m%p==0:
+                    return solve(m//(p*(p-1)),m_or)*p
     if m==1:
         return 1
     plst = sorted(factor(m,m_or))
@@ -207,7 +140,7 @@ def solve(m,m_or):
     return solve(m // (pow(p, e) * (p - 1)),m_or) * pow(p, (e + 1)//2)
     
 if __name__=='__main__':
-    # tot = totient(10**6)
+    tot = totient(10**4)
     for _ in range(int(input_func())):
         M = int(input_func())
         M_or=M
