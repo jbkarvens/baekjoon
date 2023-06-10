@@ -105,7 +105,7 @@ def mysqrt(n):
         return x+1
 
 def solve(m):
-    if m>10**24:
+    if m>2*10**24:
         for i in range(1,len(tot)):
             n = i*tot[i]
             if m%n==0:
