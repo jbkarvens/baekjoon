@@ -37,6 +37,7 @@ while True:
                     chk = False
         if chk:
             yes = True
+            break
     if yes:
         print('caught')
     else:
