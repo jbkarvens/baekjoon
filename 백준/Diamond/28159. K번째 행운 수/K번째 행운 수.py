@@ -47,7 +47,7 @@ def cal_lucky(M):
 
 if __name__=='__main__':
     lucky = list(range(-1,3030000,2))
-    for i in range(2,200000+1):
+    for i in range(2,17000):
         x = lucky[i]
         del lucky[x::x]
     lucky = lucky[:200000+1]
