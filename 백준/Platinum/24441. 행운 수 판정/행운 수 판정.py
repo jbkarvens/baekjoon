@@ -1,16 +1,11 @@
 import sys
-input = sys.stdin.readline
-SMALL = 72000
 lucky = list(range(-1,1010000,2))
-for i in range(2,SMALL+1):
+for i in range(2,6600):
     x = lucky[i]
     del lucky[x::x]
-lucky = lucky[:SMALL+1]
-lucky_set=set()
-for lk in lucky:
-    lucky_set.add(lk)
-for _ in range(int(input())):
-    if int(input()) in lucky_set:
-        print('lucky')
+lucky_set = set(lucky[:72000+1])
+for _ in range(int(sys.stdin.readline())):
+    if int(sys.stdin.readline()) in lucky_set:
+        sys.stdout.write('lucky\n')
     else:
-        print('unlucky')
+        sys.stdout.write('unlucky\n')
