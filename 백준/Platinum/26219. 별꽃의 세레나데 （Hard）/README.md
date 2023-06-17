@@ -1,4 +1,4 @@
-# [Platinum IV] 별꽃의 세레나데 (Hard) - 26219 
+# [Platinum III] 별꽃의 세레나데 (Hard) - 26219 
 
 [문제 링크](https://www.acmicpc.net/problem/26219) 
 
