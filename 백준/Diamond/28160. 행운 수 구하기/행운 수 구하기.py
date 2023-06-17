@@ -1,6 +1,4 @@
 import sys
-import math
-input_func=sys.stdin.readline
 
 # k+a*t<(a+1)*(lucky[j-t]-1)+1
 def find(k, j, a):
@@ -47,8 +45,6 @@ def cal_lucky(M):
     return 2*lucky_k-1
 
 def solve(L,R):
-    if R<=200000:
-        return lucky[L:R+1]
     lucky_k = L
     j = findlucky(R)
     x_lst = [L]
@@ -68,12 +64,11 @@ def solve(L,R):
     return new_lucky
 
 if __name__=='__main__':
-    SMALL = 200000
     lucky = list(range(-1,3030000,2))
-    for i in range(2,SMALL+1):
+    for i in range(2,17000):
         x = lucky[i]
         del lucky[x::x]
-    lucky = lucky[:SMALL+1]
-    L,R = map(int,input_func().split())
+    lucky = lucky[:200000+1]
+    L,R = map(int,input().split())
     for lk in solve(L,R):
         print(lk)
