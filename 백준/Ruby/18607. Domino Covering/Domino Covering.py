@@ -90,7 +90,7 @@ def poly_mod(f,g,p):
     return res
 
 def get_poly(n,p=None,init=False):
-    if n<=25 and not init:
+    if n<=100 and not init:
         X=poly_dict[n][:]
         for i in range(len(X)):
             X[i]%=p
@@ -103,54 +103,64 @@ def get_poly(n,p=None,init=False):
         s.append(tmp&1)
         tmp>>=1
     s.reverse()
-    A0=[[[0],[1]],[[-1],[2,1]]]
-    A=[[[0],[1]],[[-1],[2,1]]]
+    A00,A01,A10,A11=[0],[1],[-1],[2,1]
+    X00,X01,X10,X11=[0],[1],[-1],[2,1]
     for t in s:
-        a00 = poly_add(poly_mult(A[0][0], A[0][0],p),poly_mult(A[0][1],A[1][0],p),p)
-        a01 = poly_add(poly_mult(A[0][0], A[0][1],p),poly_mult(A[0][1],A[1][1],p),p)
-        a10 = poly_mult(a01,[-1],p)
-        a11 = poly_add(poly_mult(A[1][0], A[0][1],p),poly_mult(A[1][1],A[1][1],p),p)
-        A[0][0],A[0][1],A[1][0],A[1][1]=a00,a01,a10,a11
+        x00 = poly_add(poly_mult(X00, X00,p),poly_mult(X01,X10,p),p)
+        x01 = poly_mult(X01,poly_add(X00,X11,p),p)
+        x10 = poly_mult(x01,[-1],p)
+        x11 = poly_add(poly_mult(X10, X01,p),poly_mult(X11,X11,p),p)
+        X00,X01,X10,X11=x00,x01,x10,x11
         if t:
-            a00 = poly_add(poly_mult(A[0][0], A0[0][0],p),poly_mult(A[0][1],A0[1][0],p),p)
-            a01 = poly_add(poly_mult(A[0][0], A0[0][1],p),poly_mult(A[0][1],A0[1][1],p),p)
-            a10 = poly_mult(a01,[-1],p)
-            a11 = poly_add(poly_mult(A[1][0], A0[0][1],p),poly_mult(A[1][1],A0[1][1],p),p)
-            A[0][0],A[0][1],A[1][0],A[1][1]=a00,a01,a10,a11
-    return poly_add(A[0][0],poly_mult(A[0][1],[1,1],p),p)
+            x00 = poly_add(poly_mult(X00, A00,p),poly_mult(X01,A10,p),p)
+            x01 = poly_add(poly_mult(X00, A01,p),poly_mult(X01,A11,p),p)
+            x10 = poly_mult(x01,[-1],p)
+            x11 = poly_add(poly_mult(X10, A01,p),poly_mult(X11,A11,p),p)
+            X00,X01,X10,X11=x00,x01,x10,x11
+    return poly_add(X00,poly_mult(X01,[1,1],p),p)
 
 # f_m%f_n
 def get_poly_mod(n,g,p,mode=-1):
+    if 1<n<100:
+        if mode==-1:
+            f = poly_dict[n][:]
+            for i in range(len(f)):
+                if i&1:
+                    f[i]=-f[i]
+            return poly_mod(f,g,p)
+        else:
+            return poly_mod(poly_sub(poly_dict[n+1][:],poly_dict[n][:],p),g,p)
+        
     s=[]
     tmp = n
     while tmp>1:
         s.append(tmp&1)
         tmp>>=1
     s.reverse()
-    A0=[[[0],[1]],[[-1],[2,mode]]]
-    A=[[[0],[1]],[[-1],[2,mode]]]
+    A00,A01,A10,A11=[0],[1],[-1],[2,mode]
+    X00,X01,X10,X11=[0],[1],[-1],[2,mode]
     for t in s:
-        a00 = poly_add(poly_mult(A[0][0], A[0][0],p),poly_mult(A[0][1],A[1][0],p),p)
-        a01 = poly_add(poly_mult(A[0][0], A[0][1],p),poly_mult(A[0][1],A[1][1],p),p)
-        a11 = poly_add(poly_mult(A[1][0], A[0][1],p),poly_mult(A[1][1],A[1][1],p),p)
-        a00 = poly_mod(a00,g,p)
-        a01 = poly_mod(a01,g,p)
-        a10 = poly_mult(a01,[-1],p)
-        a11 = poly_mod(a11,g,p)
-        A[0][0],A[0][1],A[1][0],A[1][1]=a00,a01,a10,a11
+        x00 = poly_add(poly_mult(X00, X00,p),poly_mult(X01,X10,p),p)
+        x01 = poly_mult(X01,poly_add(X00,X11,p),p)
+        x11 = poly_add(poly_mult(X10, X01,p),poly_mult(X11,X11,p),p)
+        x00 = poly_mod(x00,g,p)
+        x01 = poly_mod(x01,g,p)
+        x10 = poly_mult(x01,[-1],p)
+        x11 = poly_mod(x11,g,p)
+        X00,X01,X10,X11=x00,x01,x10,x11
         if t:
-            a00 = poly_add(poly_mult(A[0][0], A0[0][0],p),poly_mult(A[0][1],A0[1][0],p),p)
-            a01 = poly_add(poly_mult(A[0][0], A0[0][1],p),poly_mult(A[0][1],A0[1][1],p),p)
-            a11 = poly_add(poly_mult(A[1][0], A0[0][1],p),poly_mult(A[1][1],A0[1][1],p),p)
-            a00 = poly_mod(a00,g,p)
-            a01 = poly_mod(a01,g,p)
-            a10 = poly_mult(a01,[-1],p)
-            a11 = poly_mod(a11,g,p)
-            A[0][0],A[0][1],A[1][0],A[1][1]=a00,a01,a10,a11
+            x00 = poly_add(poly_mult(X00, A00,p),poly_mult(X01,A10,p),p)
+            x01 = poly_add(poly_mult(X00, A01,p),poly_mult(X01,A11,p),p)
+            x11 = poly_add(poly_mult(X10, A01,p),poly_mult(X11,A11,p),p)
+            x00 = poly_mod(x00,g,p)
+            x01 = poly_mod(x01,g,p)
+            x10 = poly_mult(x01,[-1],p)
+            x11 = poly_mod(x11,g,p)
+            X00,X01,X10,X11=x00,x01,x10,x11
     if mode==-1:
-        return poly_add(A[0][0],poly_mult(A[0][1],[1,-1],p),p)
+        return poly_add(X00,poly_mult(X01,[1,-1],p),p)
     else:
-        return poly_add(poly_mult(A[0][0],[0,1],p),poly_mult(A[0][1],[0,2,1],p),p)
+        return poly_add(poly_mult(X00,[0,1],p),poly_mult(X01,[0,2,1],p),p)
 
 def solve(n,m,p):
     if n==1:
@@ -181,7 +191,7 @@ def solve(n,m,p):
 
 if __name__=='__main__':
     poly_dict={}
-    for i in range(1,25+1):
+    for i in range(1,100+1):
         poly_dict[i] = get_poly(i,init=True)
     for _ in range(int(input())):
         n,m,p = map(int, input().split())   
