@@ -108,13 +108,13 @@ def get_poly(n,p=None,init=False):
     for t in s:
         a00 = poly_add(poly_mult(A[0][0], A[0][0],p),poly_mult(A[0][1],A[1][0],p),p)
         a01 = poly_add(poly_mult(A[0][0], A[0][1],p),poly_mult(A[0][1],A[1][1],p),p)
-        a10 = poly_add(poly_mult(A[1][0], A[0][0],p),poly_mult(A[1][1],A[1][0],p),p)
+        a10 = poly_mult(a01,[-1],p)
         a11 = poly_add(poly_mult(A[1][0], A[0][1],p),poly_mult(A[1][1],A[1][1],p),p)
         A[0][0],A[0][1],A[1][0],A[1][1]=a00,a01,a10,a11
         if t:
             a00 = poly_add(poly_mult(A[0][0], A0[0][0],p),poly_mult(A[0][1],A0[1][0],p),p)
             a01 = poly_add(poly_mult(A[0][0], A0[0][1],p),poly_mult(A[0][1],A0[1][1],p),p)
-            a10 = poly_add(poly_mult(A[1][0], A0[0][0],p),poly_mult(A[1][1],A0[1][0],p),p)
+            a10 = poly_mult(a01,[-1],p)
             a11 = poly_add(poly_mult(A[1][0], A0[0][1],p),poly_mult(A[1][1],A0[1][1],p),p)
             A[0][0],A[0][1],A[1][0],A[1][1]=a00,a01,a10,a11
     return poly_add(A[0][0],poly_mult(A[0][1],[1,1],p),p)
@@ -132,21 +132,19 @@ def get_poly_mod(n,g,p,mode=-1):
     for t in s:
         a00 = poly_add(poly_mult(A[0][0], A[0][0],p),poly_mult(A[0][1],A[1][0],p),p)
         a01 = poly_add(poly_mult(A[0][0], A[0][1],p),poly_mult(A[0][1],A[1][1],p),p)
-        a10 = poly_add(poly_mult(A[1][0], A[0][0],p),poly_mult(A[1][1],A[1][0],p),p)
         a11 = poly_add(poly_mult(A[1][0], A[0][1],p),poly_mult(A[1][1],A[1][1],p),p)
         a00 = poly_mod(a00,g,p)
         a01 = poly_mod(a01,g,p)
-        a10 = poly_mod(a10,g,p)
+        a10 = poly_mult(a01,[-1],p)
         a11 = poly_mod(a11,g,p)
         A[0][0],A[0][1],A[1][0],A[1][1]=a00,a01,a10,a11
         if t:
             a00 = poly_add(poly_mult(A[0][0], A0[0][0],p),poly_mult(A[0][1],A0[1][0],p),p)
             a01 = poly_add(poly_mult(A[0][0], A0[0][1],p),poly_mult(A[0][1],A0[1][1],p),p)
-            a10 = poly_add(poly_mult(A[1][0], A0[0][0],p),poly_mult(A[1][1],A0[1][0],p),p)
             a11 = poly_add(poly_mult(A[1][0], A0[0][1],p),poly_mult(A[1][1],A0[1][1],p),p)
             a00 = poly_mod(a00,g,p)
             a01 = poly_mod(a01,g,p)
-            a10 = poly_mod(a10,g,p)
+            a10 = poly_mult(a01,[-1],p)
             a11 = poly_mod(a11,g,p)
             A[0][0],A[0][1],A[1][0],A[1][1]=a00,a01,a10,a11
     if mode==-1:
