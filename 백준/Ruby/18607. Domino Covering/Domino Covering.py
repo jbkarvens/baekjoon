@@ -28,39 +28,48 @@ def resultant(A,B,mod):
     res = (res*pow(A[-1],m-len(R)+1,mod))%mod
     return (res*resultant(A,R,mod))%mod
 
-def poly_mult(f,g,p):
+def poly_mult(f,g,p=None):
     n=len(f)-1
     m=len(g)-1
     res = [0 for _ in range(n+m+1)]
     for i in range(n+1):
         for j in range(m+1):
             res[i+j]+=f[i]*g[j]
-    for i in range(len(res)):
-        res[i]%=p
+    if p!=None:
+        for i in range(len(res)):
+            res[i]%=p
     while len(res)>1 and res[-1]==0:
         res.pop()
     return res
 
-def poly_add(f,g,p):
+def poly_add(f,g,p=None):
     n=len(f)-1
     m=len(g)-1
     res=[0 for _ in range(max(n,m)+1)]
     for i in range(n+1):
         res[i]=f[i]
-    for j in range(m+1):
-        res[j]=(res[j]+g[j])%p
+    if p!=None:
+        for j in range(m+1):
+            res[j]=(res[j]+g[j])%p
+    else:
+        for j in range(m+1):
+            res[j]+=g[j]
     while len(res)>1 and res[-1]==0:
         res.pop()
     return res
 
-def poly_sub(f,g,p):
+def poly_sub(f,g,p=None):
     n=len(f)-1
     m=len(g)-1
     res=[0 for _ in range(max(n,m)+1)]
     for i in range(n+1):
         res[i]=f[i]
-    for j in range(m+1):
-        res[j]=(res[j]-g[j])%p
+    if p!=None:
+        for j in range(m+1):
+            res[j]=(res[j]-g[j])%p
+    else:
+        for j in range(m+1):
+            res[j]-=g[j]
     while len(res)>1 and res[-1]==0:
         res.pop()
     return res
@@ -73,14 +82,21 @@ def poly_mod(f,g,p):
     for i in reversed(range(n-m+1)):
         a = res[i+m]*a0
         for j in range(m+1):
-            res[i+j]-=a*g[j]
+            res[i+j]-=a*g[j]        
     for i in range(len(res)):
         res[i]%=p
     while len(res)>1 and res[-1]==0:
         res.pop()
     return res
 
-def get_poly(n,p):
+def get_poly(n,p=None,init=False):
+    if n<=25 and not init:
+        X=poly_dict[n][:]
+        for i in range(len(X)):
+            X[i]%=p
+        while len(X)>1 and X[-1]==0:
+            X.pop()
+        return X
     s=[]
     tmp = n
     while tmp>1:
@@ -166,6 +182,9 @@ def solve(n,m,p):
 
 
 if __name__=='__main__':
+    poly_dict={}
+    for i in range(1,25+1):
+        poly_dict[i] = get_poly(i,init=True)
     for _ in range(int(input())):
-        n,m,p = map(int, input().split())
+        n,m,p = map(int, input().split())   
         sys.stdout.write(f'{solve(n,m,p)}\n')
