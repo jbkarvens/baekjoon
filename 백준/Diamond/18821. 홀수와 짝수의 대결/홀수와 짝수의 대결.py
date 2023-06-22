@@ -36,7 +36,7 @@ if __name__=='__main__':
     work(10**6)
     for _ in range(int(input())):
         n = int(input())
-        if n<906150257:
+        if n<906150257 or n>906488080:
             if n==1:
                 print('E')
             else:
