@@ -33,16 +33,15 @@ def L(n):
 
 if __name__=='__main__':
     L_dict={}
-    work(10**6)
     for _ in range(int(input())):
         n = int(input())
-        if n<906150257 or n>906488080:
+        if n<906150257 or n>906488079:
             if n==1:
-                print('E')
+                sys.stdout.write('E\n')
             else:
-                print('O')
+                sys.stdout.write('O\n')
         else:
             if L(n)>0:
-                print('E')
+                sys.stdout.write('E\n')
             else:
-                print('O')
+                sys.stdout.write('O\n')
