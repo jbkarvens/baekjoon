@@ -116,7 +116,7 @@ def factorial_without_p(n,p,e):
 def factorial_dmod(n,p,e):
     res = 1
     while n>0:
-        res*=factorial_without_p(n, p,e)
+        res=(res*factorial_without_p(n, p,e))%pow(p,e)
         n//=p
     return res
 
@@ -155,5 +155,6 @@ def binom(m,n,d):
     return crt(rem,mod)
 
 if __name__=='__main__':
+    f1,f2={},{}
     m,n,d=map(int, input().split())
     print(binom(m,n,d))
