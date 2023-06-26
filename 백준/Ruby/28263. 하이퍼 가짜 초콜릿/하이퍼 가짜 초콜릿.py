@@ -67,7 +67,7 @@ def divisor(prime_list):
     return div
 
 if __name__=='__main__':
-    T=200000
+    T=250000
     # m = N-1
     fac = [2]*12+[3]*6+[5]*4+[7]*2+[11]*1
     m = 1
