@@ -1,6 +1,7 @@
 import sys
 input=sys.stdin.readline
 import math
+sys.setrecursionlimit(2*10**6)
 
 def sieve(n):
     prime_check = [True for _ in range(n+1)]
@@ -19,11 +20,11 @@ def sieve(n):
                 pp*=p
     return factors
 
-def cal_size(n,x):
+def cal_size(n):
     if n==1:
         cal_list[n]=x[-1]
         return
-    cal_size(n-1,x)
+    cal_size(n-1)
     if cal_list[n-1]==10**6+1:
         if x[-n]==1:
             cal_list[n]=1
@@ -46,7 +47,7 @@ def crt(rem,mod):
         result += r*mm*pow(mm,-1,m)
     return result%M_tot
 
-def solve(n,x,m):
+def solve(n,m):
     if n==1:
         return x[-1]%m
     elif n==2:
@@ -58,13 +59,14 @@ def solve(n,x,m):
         if p in factors[m]:
             pp=pow(p,factors[m][p])
             m2//=pp
-            mod.append(pp)
-            rem.append(pow(x[-n],cal_list[n-1],pp))
+    m1=m//m2
+    mod.append(m1)
+    rem.append(pow(x[-n],cal_list[n-1],m1))
     mod.append(m2)
     phi_m2=m2
     for p in factors[m2]:
         phi_m2-=phi_m2//p
-    rem.append(pow(x[-n],solve(n-1,x,phi_m2),m2))
+    rem.append(pow(x[-n],solve(n-1,phi_m2),m2))
     return crt(rem,mod)
 
 if __name__=='__main__':
@@ -72,7 +74,7 @@ if __name__=='__main__':
     T,M=map(int,input().split())
     for _ in range(T):
         sen=input().split()
-        N,X=int(sen[0]),[*map(int, sen[1:])]
+        N,x=int(sen[0]),[*map(int, sen[1:])]
         cal_list=[None for _ in range(N+1)]
-        cal_size(N,X)
-        sys.stdout.write(str(solve(N,X,M))+'\n')
+        cal_size(N)
+        sys.stdout.write(str(solve(N,M))+'\n')
