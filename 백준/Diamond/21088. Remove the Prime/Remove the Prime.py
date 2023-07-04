@@ -2,7 +2,7 @@ import sys
 from random import randint
 from math import gcd
 input=sys.stdin.readline
-SMALL_NUM = 1000
+SMALL_NUM = 100
 
 def isPrime(n):
     s,d=0,n-1
@@ -34,13 +34,15 @@ def factor(n):
             if n==i:
                 return [n]
             else:
-                return sorted(factor(i)+factor(n//i))
+                return factor(i)+factor(n//i)
     if isPrime(n):
         return [n]
     for _ in range(100):
         y,c=randint(1,n-1),randint(1,n-1)
+        if c==n-2:
+            continue
         g,r,q=1,1,1
-        m = 100
+        m = 1000
         while g==1:
             x=y
             for _ in range(r):
@@ -64,7 +66,7 @@ def factor(n):
             continue
         else:
             break
-    return sorted(factor(g)+factor(n//g))
+    return factor(g)+factor(n//g)
 
 def solve(n,A):
     prime_dict={}
