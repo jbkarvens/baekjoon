@@ -40,15 +40,19 @@ def factor(n):
     for _ in range(100):
         y,c=randint(1,n-1),randint(1,n-1)
         g,r,q=1,1,1
+        m = 100
         while g==1:
             x=y
             for _ in range(r):
                 y=(y*y+c)%n
-            ys=y
-            for i in range(r):
-                y=(y*y+c)%n
-                q=(q*(x-y))%n
-            g=gcd(q,n)
+            k=0
+            while k<r and g==1:
+                ys=y
+                for i in range(min(m,r-k)):
+                    y=(y*y+c)%n
+                    q=(q*(x-y))%n
+                g=gcd(q,n)
+                k+=m
             r*=2
         if g==n:
             while True:
