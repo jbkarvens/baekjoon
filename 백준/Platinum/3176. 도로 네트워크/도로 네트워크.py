@@ -10,7 +10,6 @@ if __name__=='__main__':
         a,b,c=map(int,input().split())
         adj[a][b]=c
         adj[b][a]=c
-    # TODO : change root
     root = random.randint(1,n)
     logn=17
     parent=[[None for _ in range(n+1)] for _ in range(logn)]
