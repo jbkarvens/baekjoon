@@ -1,22 +1,6 @@
 import sys
-from random import randint
-import math
 input=sys.stdin.readline
 MR_TEST_LIST = [2,3,5,7,11]
-SMALL_PRIME = 100
-
-def is_small_prime(n):
-    if n<=1:
-        return False
-    elif n==2:
-        return True
-    elif n%2==0:
-        return False
-    i=3
-    while i*i<=n:
-        if n%i==0: return False
-        i+=2
-    return True
 
 def MR(n):
     s,tmp=0,n-1
@@ -38,49 +22,27 @@ def MR(n):
             return False
     return True
 
-def isPrime(n):
-    if n<SMALL_PRIME:
-        return is_small_prime(n)
-    else:
-        return MR(n)
-    
-def brent(n):
-    y,c=randint(1,n-1),randint(1,n-1)
-    g,r,q=1,1,1
-    m=40
-    while g==1:
-        x=y
-        for _ in range(r):
-            y=(y*y+c)%n
-        k=0
-        while k<r and g==1:
-            ys=y
-            for i in range(min(m,r-k)):
-                y=(y*y+c)%n
-                q=(q*(x-y))%n
-            g=math.gcd(q,n)
-            k+=m
-        r*=2
-    if g==n:
-        while True:
-            ys=(ys*ys+c)%n
-            g=math.gcd(x-ys,n)
-            if g>1:
-                break
-    return g
+def sieve(n):
+    pchk=[True for _ in range(n+1)]
+    primes=[]
+    for i in range(2,n+1):
+        if pchk[i]:
+            primes.append(i)
+            for j in range(i+i,n+1,i):
+                pchk[j]=False
+    return primes
 
 def factor(n):
     if n<=1:
         return []
-    if n%2==0:
-        return [2]+factor(n//2)
-    for i in range(3,SMALL_PRIME,2):
-        if n%i==0:
-            return [i]+factor(n//i)
-    if isPrime(n):
+    for p in pfront:
+        if n%p==0:
+            return [p] + factor(n//p)
+    if MR(n):
         return [n]
-    d = brent(n)
-    return factor(d) + factor(n//d)
+    for p in pback:
+        if n%p==0:
+            return [p] + factor(n//p)
 
 def r4(n):
     if n==0:
@@ -112,6 +74,10 @@ def r5(n):
     return result
 
 if __name__=='__main__':
+    plst=sieve(10**5)
+    cut=6
+    pfront=plst[:cut]
+    pback=plst[cut:]
     n=int(input())
-    print(r4(n))
-    print(r5(n))
+    sys.stdout.write(f'{r4(n)}\n')
+    sys.stdout.write(f'{r5(n)}\n')
