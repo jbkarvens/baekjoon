@@ -1,18 +1,23 @@
-V=int(input())
-E=[[] for _ in range(V+1)]
-E_rev=[[] for _ in range(V+1)]
-for i in range(1,V+1):
-    for j,c in enumerate(input()):
-        if c=="W":
-            E[j+1].append(i)
-            E_rev[i].append(j+1)
+import sys
+input=sys.stdin.readline
 
-cnt,gosu = -1,-1
+V=int(input())
+E=[None for _ in range(V+1)]
+out=[0 for _ in range(V+1)]
 for i in range(1,V+1):
-    if cnt<len(E_rev[i]):
+    str=input()
+    for j in range(V):
+        if str[j]=='W':
+            if E[j+1]==None:
+                E[j+1]=i
+            out[i]+=1
+
+cnt_out,gosu = -1,-1
+for i in range(1,V+1):
+    if cnt_out<out[i]:
         gosu=i
-        cnt=len(E_rev[i])
-if not E[gosu]:
+        cnt_out=out[i]
+if E[gosu]==None:
     print(1,gosu)
 else:
     print(2,gosu)
