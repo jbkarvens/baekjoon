@@ -51,10 +51,13 @@ for v in idx:
         sc(v)
 suc=True
 for comp in scc:
+    comp=set(comp)
     for v in comp:
         if -v in comp:
             suc=False
             break
+    if not suc:
+        break
 if suc:
     print(1)
 else:
