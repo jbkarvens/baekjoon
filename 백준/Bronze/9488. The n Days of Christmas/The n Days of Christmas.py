@@ -1,7 +1,6 @@
 import sys
-input=sys.stdin.readline
 while True:
-    a=int(input())
+    a=int(sys.stdin.readline())
     if a==0:
         break
-    print(a*(a+1)*(a+2)//6)
+    sys.stdout.write(str(a*(a+1)*(a+2)//6)+'\n')
