@@ -22,13 +22,13 @@ def getprod(s,e,n,l,r):
 def doupdate(s,e,n,i,d):
     global mod
     if i<s or e<i:
-        return
-    seg[n]=(seg[n]*d)%mod
+        return seg[n]
     if s==e:
-        return
+        seg[n]=d
+        return seg[n]
     m=(s+e)//2
-    doupdate(s,m,2*n,i,d)
-    doupdate(m+1,e,2*n+1,i,d)
+    seg[n]=(doupdate(s,m,2*n,i,d)*doupdate(m+1,e,2*n+1,i,d))%mod
+    return seg[n]
 
 mod=10**9+7
 N,M,K=map(int,input().split())
@@ -40,12 +40,8 @@ init(0,N-1,1)
 for _ in range(M+K):
     a,b,c=map(int,input().split())
     if a==1:
-        if arr[b-1]==0:
-            arr[b-1]=c
-            init(0,N-1,1)
-        else:
-            doupdate(0,N-1,1,b-1,c*pow(arr[b-1],-1,mod))
-            arr[b-1]=c
+        doupdate(0,N-1,1,b-1,c)
+        arr[b-1]=c
     elif a==2:
         x=getprod(0,N-1,1,b-1,c-1)
         sys.stdout.write(f'{x}\n')
